@@ -1,0 +1,7 @@
+## Requirements for git-cog.py
+
+pygit2
+argparse
+PyGithub
+python-gitlab
+giturlparse
