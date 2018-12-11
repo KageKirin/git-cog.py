@@ -16,7 +16,13 @@ clone and add this to your path.
 ### create a pull request
 
 ```
-git cog create-pull-request <remote> [--into <master>] [--head <current branch>] [--title <title>] [--message <message>]
+git cog create-pullrequest <remote> [--into <master>] [--head <current branch>] [--title <title>] [--message <message>]
+```
+
+### find pull requests
+
+```
+git cog find-pullrequests <remote> [--into <master>] [--head <current branch>]
 ```
 
 ### more functionality to be added over time
@@ -50,5 +56,5 @@ Example:
 ## Example
 
 ```
-git cog create-pull-request origin --into master --head feature/cookies -t "merging cookies" -m "hmm! cookies!!"
+git cog create-pullrequest origin --into master --head feature/cookies -t "merging cookies" -m "hmm! cookies!!"
 ```
