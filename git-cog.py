@@ -7,6 +7,13 @@ import string
 from pygit2 import Repository
 import giturlparse
 import argparse
+from enum import Enum
+
+class RemoteVisibility(Enum):
+    DEFAULT = 0
+    PRIVATE = 1
+    PROTECTED = 2
+    PUBLIC = 3
 
 repo = Repository('.')
 
@@ -26,11 +33,20 @@ def parseArgs_find_pullrequest(args_tail):
     subargs = parser.parse_args(args_tail)
     return subargs
 
+def parseArgs_create_remote(args_tail):
+    parser = argparse.ArgumentParser('git cog create-remote <origin>')
+    parser.add_argument('--with-lfs', help='enables LFS support', action='store_true')
+    parser.add_argument('--with-jobs', help='enables jobs (gitlab only)', action='store_false')
+    parser.add_argument('--visibility', help='visibility {} (default: {})'.format([e for e in RemoteVisibility], RemoteVisibility.DEFAULT), type=RemoteVisibility, default=RemoteVisibility.DEFAULT)
+    subargs = parser.parse_args(args_tail)
+    return subargs
+
 def parseArgs_help(action, args_tail):
     action = re.sub('-', '_', action)
     actions = {
         'create_pullrequest': parseArgs_create_pullrequest,
-        'find_pullrequest': parseArgs_find_pullrequest
+        'find_pullrequest': parseArgs_find_pullrequest,
+        'create_remote': parseArgs_create_remote,
     }
     fn = actions.get(action)
     assert fn, "Invalid action {}".format(action)
@@ -71,6 +87,10 @@ class GithubCog:
 
     def find_pullrequests(self, args_tail):
         return self.find_pullrequest(args_tail)
+
+    def create_remote(self, args_tail):
+        args = parseArgs_create_remote(args_tail)
+
 
     ## must come last
     def get_action(self, action):
@@ -114,6 +134,15 @@ class GitlabCog:
 
     def find_pullrequests(self, args_tail):
         return self.find_pullrequest(args_tail)
+
+    def create_remote(self, args_tail):
+        owner = giturlparse.parse(self.url_http).owner
+        print(owner)
+        owners = self.handle.namespaces.list(search=owner)
+        print(owners)
+
+        args = parseArgs_create_remote(args_tail)
+
 
     ## must come last
     def get_action(self, action):
