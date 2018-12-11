@@ -105,11 +105,10 @@ class GitlabCog:
 
     def find_pullrequest(self, args_tail):
         args = parseArgs_find_pullrequest(args_tail)
-        prs = self.repo_handle.mergerequests.list({
-            'target_branch': args.into,
-            'source_branch': args.head,
-        })
-        #print("found {} pull requests".format(len(prs)))
+        prs = filter(lambda x:
+            x.target_branch == args.into and
+            x.source_branch == args.head,
+            self.repo_handle.mergerequests.list())
         for pr in prs:
             print(pr.web_url, '\t', pr.title, pr.state, pr.merge_status, pr.merged_at, pr.merge_commit_sha)
 
