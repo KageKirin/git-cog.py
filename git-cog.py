@@ -66,9 +66,8 @@ class GithubCog:
         prs = self.repo_handle.get_pulls(
             base=args.into,
             head=args.head)
-        #print("found {} pull requests".format(len(prs)))
         for pr in prs:
-            print(pr.html_url, '\t', pr.title, pr.merged, pr.merged_at, pr.merge_commit_sha)
+            print(pr.html_url, '\t', pr.title, pr.merged, pr.mergeable, pr.merged_at, pr.merge_commit_sha)
 
     def find_pullrequests(self, args_tail):
         return self.find_pullrequest(args_tail)
@@ -114,7 +113,7 @@ class GitlabCog:
         })
         #print("found {} pull requests".format(len(prs)))
         for pr in prs:
-            print(pr.web_url, '\t', pr.title, pr.merged, pr.merged_at, pr.merge_commit_sha)
+            print(pr.web_url, '\t', pr.title, pr.state, pr.merge_status, pr.merged_at, pr.merge_commit_sha)
 
     def find_pullrequests(self, args_tail):
         return self.find_pullrequest(args_tail)
