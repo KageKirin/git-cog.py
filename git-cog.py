@@ -87,10 +87,8 @@ class GitlabCog:
         self.repo = repopath
         self.handle = Gitlab(self.url_api, private_token=token)
         assert self.handle, "could not connect to server at {}".format(self.url_api)
-        authOk = self.handle.auth()
-        assert authOk, "could not authenticate with server at {}".format(self.url_api)
-        print(self.repo)
-        self.repo_handle = self.projects.get(self.repo)
+        self.handle.auth()
+        self.repo_handle = self.handle.projects.get(self.repo)
         assert self.repo_handle, "could not retrieve repo at {}".format(self.url_http)
 
     def create_pullrequest(self, args_tail):
