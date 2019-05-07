@@ -28,7 +28,7 @@ def parseArgs_find_pullrequest(args_tail):
 
 def parseArgs_size(args_tail):
     parser = argparse.ArgumentParser('git cog size <origin>')
-    parser.add_argument('--format', help='size format', choices=['kb', 'mb', 'gb', 'tb'], default="mb")
+    parser.add_argument('--format', help='size format', choices=['none','kb', 'mb', 'gb', 'tb'], default="mb")
     subargs = parser.parse_args(args_tail)
     return subargs
 
@@ -87,7 +87,10 @@ class GithubCog:
             scale *= 1024 * 1024
         if args.format == 'tb':
             scale *= 1024 * 1024 * 1024
-        print(self.repo_handle.size / scale, args.format)
+        if args.format != 'none':
+            print(self.repo_handle.size / scale)
+        else:
+            print(self.repo_handle.size)
 
 
     ## must come last
